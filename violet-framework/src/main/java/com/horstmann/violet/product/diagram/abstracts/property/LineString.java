@@ -15,6 +15,15 @@ public class LineString implements Serializable, Cloneable {
 
     private final static int DEFAULT_FONT_SIZE = 12;
     private String text;
+
+    public LineLabel getLabel() {
+        return label;
+    }
+
+    public void setLabel(LineLabel label) {
+        this.label = label;
+    }
+
     private LineLabel label;
     private Font defaultFont;
 
