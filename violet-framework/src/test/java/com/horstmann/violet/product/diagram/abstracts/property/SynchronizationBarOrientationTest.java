@@ -1,5 +1,7 @@
 package com.horstmann.violet.product.diagram.abstracts.property;
 
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -8,21 +10,32 @@ import static org.junit.Assert.*;
 public class SynchronizationBarOrientationTest
 {
 
-    @org.junit.Test
-    public void testIsVertical() throws Exception
+    @Test
+    public void shouldBeVertical()
     {
+        //given
+        final SynchronizationBarOrientation synchronizationBarOrientation = new SynchronizationBarOrientation();
+        synchronizationBarOrientation.setVertical(true);
 
+        //when
+        final boolean isVertical = synchronizationBarOrientation.isVertical();
+
+        //then
+        assertTrue(isVertical);
     }
 
-    @org.junit.Test
-    public void testSetVertical() throws Exception
+    @Test
+    public void shouldBeClonedObject()
     {
+        //given
+        final SynchronizationBarOrientation original = new SynchronizationBarOrientation(false);
 
+        //when
+        final SynchronizationBarOrientation cloned = original.clone();
+
+        //then
+        assertNotEquals(original, cloned);
+        assertEquals(original.isVertical(), cloned.isVertical());
     }
 
-    @org.junit.Test
-    public void testClone() throws Exception
-    {
-
-    }
 }

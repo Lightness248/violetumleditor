@@ -6,9 +6,10 @@ import java.io.Serializable;
  * Created by Slawomir Pomazany on 2016-01-31.
  */
 public class SynchronizationBarOrientation implements Serializable, Cloneable {
+
     private boolean isVertical = true;
 
-    private SynchronizationBarOrientation() {/**/}
+    public SynchronizationBarOrientation() {/**/}
 
     public SynchronizationBarOrientation(final boolean isVertical) {
         this.isVertical = isVertical;
