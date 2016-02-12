@@ -391,6 +391,7 @@ public class CustomPropertyEditor implements ICustomPropertyEditor
         editors.put(LineString.class, LineStringEditor.class);
         editors.put(String.class, StringEditor.class);
         editors.put(ImageIcon.class, ImageIconEditor.class);
+        editors.put(SynchronizationBarOrientation.class, SynchronizationBarOrientationEditor.class);
     }
 
     private static Set<Class<?>> knownImmutables = new HashSet<Class<?>>();

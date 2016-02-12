@@ -37,66 +37,9 @@ import com.horstmann.violet.product.diagram.abstracts.property.BentStyle;
 public class ActivityTransitionEdge extends SegmentedLineEdge
 {
 
-
     @Override
     public ArrowHead getEndArrowHead()
     {
         return ArrowHead.V;
     }
-    
-    @Override
-    public Direction getDirection(INode node)
-    {
-        BentStyle bStyle = getBentStyle();
-        Direction straightDirection = super.getDirection(node);
-        double x = straightDirection.getX();
-        double y = straightDirection.getY();
-        if (node.equals(getStart()))
-        {
-            if (BentStyle.HV.equals(bStyle) || BentStyle.HVH.equals(bStyle))
-            {
-                return (x >= 0) ? Direction.EAST : Direction.WEST;
-            }
-            if (BentStyle.VH.equals(bStyle) || BentStyle.VHV.equals(bStyle))
-            {
-                return (y >= 0) ? Direction.SOUTH : Direction.NORTH;
-            }
-        }
-        if (node.equals(getEnd()))
-        {
-            if (BentStyle.HV.equals(bStyle) || BentStyle.VHV.equals(bStyle))
-            {
-                return (y >= 0) ? Direction.SOUTH : Direction.NORTH;
-            }
-            if (BentStyle.VH.equals(bStyle) || BentStyle.HVH.equals(bStyle))
-            {
-                return (x >= 0) ? Direction.EAST : Direction.WEST;
-            }
-        }
-        if (SynchronizationBarNode.class.isInstance(getStart()) || SynchronizationBarNode.class.isInstance(getEnd())) {
-        	if (node.equals(getStart())) {
-        		Point2D p1 = node.getLocationOnGraph();
-        		Point2D p2 = getEnd().getLocationOnGraph();
-        		if (p1.getY() < p2.getY()) {
-        			return Direction.NORTH;
-        		}
-       		    if (p1.getY() > p2.getY()) {
-        			return Direction.SOUTH;
-        		}
-        	}
-        	if (node.equals(getEnd())) {
-        		Point2D p1 = node.getLocationOnGraph();
-        		Point2D p2 = getStart().getLocationOnGraph();
-        		if (p1.getY() < p2.getY()) {
-        			return Direction.NORTH;
-        		}
-       		    if (p1.getY() > p2.getY()) {
-        			return Direction.SOUTH;
-        		}
-        	}
-        }
-        return straightDirection;
-    }
-
-
 }

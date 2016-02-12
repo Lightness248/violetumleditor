@@ -7,7 +7,9 @@ import java.awt.geom.Rectangle2D;
 
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.abstracts.node.RectangularNode;
+import com.horstmann.violet.product.diagram.abstracts.property.LineString;
 import com.horstmann.violet.product.diagram.abstracts.property.MultiLineString;
+import com.horstmann.violet.product.diagram.abstracts.property.TypeList;
 import com.horstmann.violet.product.diagram.common.PointNode;
 
 /**
@@ -20,12 +22,12 @@ public class ClassNode extends RectangularNode
      */
     public ClassNode()
     {
-        name = new MultiLineString();
-        name.setSize(MultiLineString.LARGE);
+        name = new LineString();
         attributes = new MultiLineString();
         attributes.setJustification(MultiLineString.LEFT);
         methods = new MultiLineString();
         methods.setJustification(MultiLineString.LEFT);
+       // type = new TypeList(name);
     }
     
     private Rectangle2D getTopRectangleBounds() {
@@ -151,12 +153,17 @@ public class ClassNode extends RectangularNode
         return false;
     }
 
+   // public void setType(TypeList newValue) { this.type = newValue; }
+
+   // public TypeList getType() { return this.type; }
+
+
     /**
      * Sets the name property value.
      * 
      * @param newValue the class name
      */
-    public void setName(MultiLineString newValue)
+    public void setName(LineString newValue)
     {
         name = newValue;
     }
@@ -166,7 +173,7 @@ public class ClassNode extends RectangularNode
      * 
      * @return the class name
      */
-    public MultiLineString getName()
+    public LineString getName()
     {
         return name;
     }
@@ -219,14 +226,15 @@ public class ClassNode extends RectangularNode
     public ClassNode clone()
     {
         ClassNode cloned = (ClassNode) super.clone();
-        cloned.name = (MultiLineString) name.clone();
-        cloned.methods = (MultiLineString) methods.clone();
-        cloned.attributes = (MultiLineString) attributes.clone();
+        cloned.name = name.clone();
+        cloned.methods = methods.clone();
+        cloned.attributes = attributes.clone();
+        //cloned.type = new TypeList(cloned.name);
         return cloned;
     }
 
-
-    private MultiLineString name;
+    //private TypeList type;
+    private LineString name;
     private MultiLineString attributes;
     private MultiLineString methods;
 
