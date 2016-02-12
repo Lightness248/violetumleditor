@@ -27,11 +27,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import com.horstmann.violet.product.diagram.abstracts.Direction;
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.abstracts.node.RectangularNode;
-import com.horstmann.violet.product.diagram.abstracts.property.MultiLineString;
+import com.horstmann.violet.product.diagram.abstracts.property.LineString;
 
 /**
  * An object node in an object diagram.
@@ -43,9 +42,10 @@ public class ObjectNode extends RectangularNode
      */
     public ObjectNode()
     {
-        name = new MultiLineString();
-        name.setUnderlined(true);
-        name.setSize(MultiLineString.LARGE);
+        name = new LineString();
+        name.setFontSize(LineString.FontSize.MEDIUM);
+        name.setFontStyle(LineString.FontStyle.BOLD);
+        name.setFontStyle(LineString.FontStyle.UNDERLINE);
     }
 
     public void draw(Graphics2D g2)
@@ -91,12 +91,6 @@ public class ObjectNode extends RectangularNode
     public Rectangle2D getTopRectangle()
     {
         Rectangle2D b = name.getBounds();
-        double defaultHeight = DEFAULT_HEIGHT;
-        boolean hasChildren = (getChildren().size() > 0);
-        if (hasChildren)
-        {
-            defaultHeight = defaultHeight - YGAP;
-        }
         Point2D currentLocation = getLocation();
         double x = currentLocation.getX();
         double y = currentLocation.getY();
@@ -154,7 +148,7 @@ public class ObjectNode extends RectangularNode
         return true;
     }
 
-    public Point2D getConnectionPoint(Direction d)
+/*    public Point2D getConnectionPoint(Direction d)
     {
         Rectangle2D topBounds = getTopRectangle();
         double topHeight = topBounds.getHeight();
@@ -163,24 +157,14 @@ public class ObjectNode extends RectangularNode
             return new Point2D.Double(getBounds().getMaxX(), getBounds().getMinY() + topHeight / 2);
         }
         return new Point2D.Double(getBounds().getX(), getBounds().getMinY() + topHeight / 2);
-    }
+    }*/
 
-    /**
-     * Sets the name property value.
-     * 
-     * @param newValue the new object name
-     */
-    public void setName(MultiLineString n)
+    public void setName(LineString n)
     {
         name = n;
     }
 
-    /**
-     * Gets the name property value.
-     * 
-     * @param the object name
-     */
-    public MultiLineString getName()
+    public LineString getName()
     {
         return name;
     }
@@ -207,9 +191,8 @@ public class ObjectNode extends RectangularNode
         return cloned;
     }
 
-    private MultiLineString name;
+    private LineString name;
 
     private static int DEFAULT_WIDTH = 80;
     private static int DEFAULT_HEIGHT = 30;
-    private static int YGAP = 5;
 }
