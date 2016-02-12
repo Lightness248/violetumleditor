@@ -11,3 +11,16 @@
 
 # Maven build files #
 target/
+.idea
+/*.iml
+/violet-framework/*.iml
+/violetplugin-activitydiagram/violetplugin-activitydiagram.iml
+/violetplugin-classdiagram/violetplugin-classdiagram.iml
+/violetplugin-objectdiagram
+/violetplugin-sequencediagram/*.iml
+/violetplugin-statediagram/violetplugin-statediagram.iml
+/violetplugin-usecasediagram/violetplugin-usecasediagram.iml
+/violetproduct-deb/violetproduct-deb.iml
+/violetproduct-exe/violetproduct-exe.iml
+/violetproduct-swing/violetproduct-swing.iml
+/violetproduct-web/violetproduct-web.iml

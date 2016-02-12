@@ -14,9 +14,9 @@ import java.util.Hashtable;
 public class LineString implements Serializable, Cloneable {
 
     private final static int DEFAULT_FONT_SIZE = 12;
-    private String text;
     private LineLabel label;
     private Font defaultFont;
+    private String text;
 
     public LineString() {
         this.text = "";
@@ -25,17 +25,25 @@ public class LineString implements Serializable, Cloneable {
         this.label.setFont(defaultFont);
     }
 
-    public String getText() {
-        return text;
+    public LineLabel getLabel() {
+        return label;
     }
 
-    public void setText(String text) {
-        this.text = text;
-        setLabelText();
+    public void setLabel(final LineLabel label) {
+        this.label = label;
     }
 
     private void setLabelText() {
         this.label.setLabelText(text);
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(final String text) {
+        this.text = text;
+        setLabelText();
     }
 
     public Rectangle2D getBounds() {
@@ -61,8 +69,8 @@ public class LineString implements Serializable, Cloneable {
         ITALIC
     }
 
-    public void setFontStyle(FontStyle fStyle) {
-        Hashtable<TextAttribute, Object> map = new Hashtable<TextAttribute, Object>();
+    public void setFontStyle(final FontStyle fStyle) {
+        final Hashtable<TextAttribute, Object> map = new Hashtable<>();
         switch (fStyle) {
             case UNDERLINE:
                 map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
@@ -89,7 +97,7 @@ public class LineString implements Serializable, Cloneable {
 
         private final float size;
 
-        FontSize(float size) {
+        FontSize(final float size) {
             this.size = size;
         }
 
@@ -98,7 +106,7 @@ public class LineString implements Serializable, Cloneable {
         }
     }
 
-    public void setFontSize(FontSize fs) {
+    public void setFontSize(final FontSize fs) {
         switch(fs) {
             case SMALL:
                 this.defaultFont = defaultFont.deriveFont(fs.getSize());

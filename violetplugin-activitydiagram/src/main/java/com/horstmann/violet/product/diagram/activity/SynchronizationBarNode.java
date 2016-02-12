@@ -31,6 +31,8 @@ import java.util.List;
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.abstracts.node.RectangularNode;
+import com.horstmann.violet.product.diagram.abstracts.property.LineString;
+import com.horstmann.violet.product.diagram.abstracts.property.SynchronizationBarOrientation;
 
 /**
  * A synchronization bar node in an activity diagram.
@@ -39,37 +41,79 @@ public class SynchronizationBarNode extends RectangularNode
 {
 
     @Override
-    public boolean addConnection(IEdge e)
+    public boolean addConnection(final IEdge e)
     {
         return e.getEnd() != null && this != e.getEnd();
     }
 
     @Override
-    public Point2D getConnectionPoint(IEdge e)
+    public Point2D getConnectionPoint(final IEdge e)
     {
-        Point2D defaultConnectionPoint = super.getConnectionPoint(e);
+        final Point2D defaultConnectionPoint = super.getConnectionPoint(e);
         if (!ActivityTransitionEdge.class.isInstance(e))
         {
             return defaultConnectionPoint;
         }
+        else if (orientation.isVertical())
+        {
+            return verticalConnectionPoint(e);
+        }
+        else if (!orientation.isVertical())
+        {
+            return horizontalConnectionPoint(e);
+        }
+        return defaultConnectionPoint;
+    }
 
-        INode end = e.getEnd();
-        INode start = e.getStart();
+    private Point2D verticalConnectionPoint(final IEdge e)
+    {
+        final Point2D defaultConnectionPoint = super.getConnectionPoint(e);
+        if (!ActivityTransitionEdge.class.isInstance(e))
+        {
+            return defaultConnectionPoint;
+        }
+        final INode end = e.getEnd();
+        final INode start = e.getStart();
         if (this == start)
         {
-            Point2D endConnectionPoint = end.getConnectionPoint(e);
-            double y = defaultConnectionPoint.getY();
-            double x = endConnectionPoint.getX();
+            final Point2D endConnectionPoint = end.getConnectionPoint(e);
+            final double y = defaultConnectionPoint.getY();
+            final double x = endConnectionPoint.getX();
             return new Point2D.Double(x, y);
         }
         if (this == end)
         {
-            Point2D startConnectionPoint = start.getConnectionPoint(e);
-            double y = defaultConnectionPoint.getY();
-            double x = startConnectionPoint.getX();
+            final Point2D startConnectionPoint = start.getConnectionPoint(e);
+            final double y = defaultConnectionPoint.getY();
+            final double x = startConnectionPoint.getX();
             return new Point2D.Double(x, y);
         }
+        return defaultConnectionPoint;
+    }
 
+    private Point2D horizontalConnectionPoint(final IEdge e)
+    {
+        final Point2D defaultConnectionPoint = super.getConnectionPoint(e);
+        if (!ActivityTransitionEdge.class.isInstance(e))
+        {
+            return defaultConnectionPoint;
+        }
+        final INode end = e.getEnd();
+        final INode start = e.getStart();
+        if (this == start)
+        {
+            final Point2D endConnectionPoint = end.getConnectionPoint(e);
+            final double y = endConnectionPoint.getY();
+            final double x = defaultConnectionPoint.getX();
+            return new Point2D.Double(x, y);
+        }
+        if (this == end)
+        {
+            final Point2D startConnectionPoint = start.getConnectionPoint(e);
+            final double y = startConnectionPoint.getY();
+            final double x = defaultConnectionPoint.getX();
+            return new Point2D.Double(x, y);
+        }
         return defaultConnectionPoint;
     }
 
@@ -77,46 +121,70 @@ public class SynchronizationBarNode extends RectangularNode
     public Rectangle2D getBounds()
     {
         Rectangle2D b = getDefaultBounds();
-        List<INode> connectedNodes = getConnectedNodes();
+        final List<INode> connectedNodes = getConnectedNodes();
         if (connectedNodes.size() > 0)
         {
-            double minX = Double.MAX_VALUE;
-            double maxX = Double.MIN_VALUE;
-            for (INode n : connectedNodes)
+            if (orientation.isVertical())
             {
-                Rectangle2D b2 = n.getBounds();
-                minX = Math.min(minX, b2.getMinX());
-                maxX = Math.max(maxX, b2.getMaxX());
-            }
+                double minX = Double.MAX_VALUE;
+                double maxX = Double.MIN_VALUE;
 
-            minX -= EXTRA_WIDTH;
-            maxX += EXTRA_WIDTH;
-            // calling translate() hare is a hack but this node (at the opposite of other nodes)
-            // can have its location changed when it is connected to other nodes.
-            // Other nodes are usually only moved with a drag and drop action.
-            translate(minX - b.getX(), 0);
-            b = new Rectangle2D.Double(minX, b.getY(), maxX - minX, DEFAULT_HEIGHT);
+                for (final INode n : connectedNodes)
+                {
+                    minX = Math.min(minX, n.getBounds().getMinX());
+                    maxX = Math.max(maxX, n.getBounds().getMaxX());
+                }
+
+                minX -= EXTRA_WIDTH;
+                maxX += EXTRA_WIDTH;
+                translate(minX - b.getX(), 0);
+                b = new Rectangle2D.Double(minX, b.getY(), maxX - minX, DEFAULT_HEIGHT);
+
+            }
+            else if (!orientation.isVertical())
+            {
+                double minY = Double.MAX_VALUE;
+                double maxY = Double.MIN_VALUE;
+
+                for (final INode n : connectedNodes)
+                {
+                    minY = Math.min(minY, n.getBounds().getMinY());
+                    maxY = Math.max(maxY, n.getBounds().getMaxY());
+                }
+
+                minY -= EXTRA_HEIGHT;
+                maxY += EXTRA_HEIGHT;
+                translate(0, minY - b.getY());
+                b = new Rectangle2D.Double(b.getX(), minY, DEFAULT_HEIGHT, maxY - minY);
+            }
         }
         return b;
     }
 
     /**
-     * 
      * @return minimal bounds (location + default width and default height
      */
     private Rectangle2D getDefaultBounds()
     {
-        Point2D currentLocation = getLocation();
-        double x = currentLocation.getX();
-        double y = currentLocation.getY();
-        double w = DEFAULT_WIDTH;
-        double h = DEFAULT_HEIGHT;
-        Rectangle2D currentBounds = new Rectangle2D.Double(x, y, w, h);
+        final Point2D currentLocation = getLocation();
+        final double x = currentLocation.getX();
+        final double y = currentLocation.getY();
+        final double w = DEFAULT_WIDTH;
+        final double h = DEFAULT_HEIGHT;
+        Rectangle2D currentBounds = null;
+        if (orientation.isVertical())
+        {
+            currentBounds = new Rectangle2D.Double(x, y, w, h);
+
+        }
+        else if (!orientation.isVertical())
+        {
+            currentBounds = new Rectangle2D.Double(x, y, h, w);
+        }
         return currentBounds;
     }
 
     /**
-     * 
      * @return nodes which are connected (with edges) to this node
      */
     private List<INode> getConnectedNodes()
@@ -147,16 +215,36 @@ public class SynchronizationBarNode extends RectangularNode
         g2.setColor(oldColor);
     }
 
+    public void setOrientation(SynchronizationBarOrientation newValue)
+    {
+        orientation = newValue;
+    }
+
+    public SynchronizationBarOrientation getOrientation()
+    {
+        return orientation;
+    }
+
     /**
      * @see java.lang.Object#clone()
      */
     @Override
     public SynchronizationBarNode clone()
     {
-        return (SynchronizationBarNode) super.clone();
+        final SynchronizationBarNode cloned = (SynchronizationBarNode) super.clone();
+        cloned.orientation = orientation.clone();
+        return cloned;
     }
 
-    private static int DEFAULT_WIDTH = 100;
-    private static int DEFAULT_HEIGHT = 4;
-    private static int EXTRA_WIDTH = 12;
+    public SynchronizationBarNode()
+    {
+        this.orientation = new SynchronizationBarOrientation(true);
+    }
+
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 4;
+    private static final int EXTRA_HEIGHT = 12;
+    private static final int EXTRA_WIDTH = 12;
+
+    private SynchronizationBarOrientation orientation;
 }

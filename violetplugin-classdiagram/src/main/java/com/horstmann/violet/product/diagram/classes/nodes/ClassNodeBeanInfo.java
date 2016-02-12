@@ -19,6 +19,8 @@ public class ClassNodeBeanInfo extends SimpleBeanInfo
     {
         try
         {
+            /*PropertyDescriptor typeDescriptor = new PropertyDescriptor("type", ClassNode.class);
+            typeDescriptor.setValue("priority", new Integer(1));*/
             PropertyDescriptor nameDescriptor = new PropertyDescriptor("name", ClassNode.class);
             nameDescriptor.setValue("priority", new Integer(1));
             PropertyDescriptor attributesDescriptor = new PropertyDescriptor("attributes", ClassNode.class);
@@ -27,6 +29,7 @@ public class ClassNodeBeanInfo extends SimpleBeanInfo
             methodsDescriptor.setValue("priority", new Integer(3));
             return new PropertyDescriptor[]
             {
+                    //typeDescriptor,
                     nameDescriptor,
                     attributesDescriptor,
                     methodsDescriptor

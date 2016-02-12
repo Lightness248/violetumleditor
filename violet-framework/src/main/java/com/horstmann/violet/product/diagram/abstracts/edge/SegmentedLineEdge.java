@@ -56,7 +56,8 @@ public abstract class SegmentedLineEdge extends ShapeEdge
         middleLabel = "";
         endLabel = "";
     }
-    
+
+
     @Override
     public boolean isTransitionPointsSupported()
     {
